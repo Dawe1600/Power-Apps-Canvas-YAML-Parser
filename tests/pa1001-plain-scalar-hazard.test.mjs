@@ -55,6 +55,8 @@ MyButton:
       =UpdateContext({ locVisible: true })
     Tooltip: |
       ="Status: " & If(true, "OK", "Błąd")
+    Description: |2-
+      ="Info: " & User().FullName
 `;
     const result = validateYaml(yaml);
 

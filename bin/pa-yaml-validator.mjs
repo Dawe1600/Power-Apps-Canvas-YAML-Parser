@@ -49,10 +49,11 @@ function parseCliArgs(args) {
 
 function resolveFiles(filePaths) {
   const resolved = [];
+  const missing = [];
 
   for (const filePath of filePaths) {
     if (!fs.existsSync(filePath)) {
-      console.error(`Błąd: Nie znaleziono pliku lub katalogu: ${filePath}`);
+      missing.push(filePath);
       continue;
     }
 
@@ -69,7 +70,7 @@ function resolveFiles(filePaths) {
     }
   }
 
-  return resolved;
+  return { files: resolved, missing };
 }
 
 function main() {
@@ -86,8 +87,8 @@ function main() {
     process.exit(1);
   }
 
-  const files = resolveFiles(options.files);
-  if (files.length === 0) {
+  const { files, missing } = resolveFiles(options.files);
+  if (files.length === 0 && missing.length === 0) {
     console.error('Błąd: Nie znaleziono plików YAML do walidacji.');
     process.exit(1);
   }
@@ -95,6 +96,25 @@ function main() {
   const results = [];
   let totalErrors = 0;
   let totalWarnings = 0;
+
+  for (const missingPath of missing) {
+    totalErrors++;
+    results.push({
+      file: missingPath,
+      valid: false,
+      diagnostics: [
+        {
+          code: 'CLI_IO_ERROR',
+          severity: 'error',
+          message: `Nie znaleziono pliku lub katalogu: ${missingPath}`,
+          line: 1,
+          column: 1,
+          lineText: '',
+          hint: 'Upewnij się, że podana ścieżka pliku jest poprawna.'
+        }
+      ]
+    });
+  }
 
   for (const file of files) {
     let content;

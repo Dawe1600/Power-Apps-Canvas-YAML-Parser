@@ -62,7 +62,7 @@ function checkLineIndentation(line, lineNumber, indentationLines, diagnostics) {
  * Validates unquoted special YAML indicators (@, `, *, &, !, %) at the start of a scalar.
  */
 function checkSpecialIndicatorHazard(line, lineNumber, hazardLines, diagnostics) {
-  const specialIndicatorMatch = line.match(/^(\s*)([A-Za-z0-9_]+):\s*([@`*&!%])(.*)$/);
+  const specialIndicatorMatch = line.match(/^(\s*)(?:([A-Za-z0-9_]+):|-)\s*([@`*&!%])(.*)$/);
   if (!specialIndicatorMatch) {
     return false;
   }
@@ -135,8 +135,13 @@ function checkPlainScalarHazard(line, lineNumber, hazardLines, diagnostics) {
 function checkDocErrors(doc, lines, hazardLines, indentationLines, diagnostics) {
   for (const err of doc.errors) {
     const pos = err.linePos ? err.linePos[0] : { line: 1, col: 1 };
-    // Skip if line or previous line was already diagnosed with Plain Scalar Hazard or Indentation error
-    if (hazardLines.has(pos.line) || hazardLines.has(pos.line - 1) || indentationLines.has(pos.line)) {
+    // Skip if line was already diagnosed with Plain Scalar Hazard or Indentation error,
+    // or if previous line had a Plain Scalar Hazard that caused an unclosed quote MISSING_CHAR panic.
+    if (
+      hazardLines.has(pos.line) ||
+      (hazardLines.has(pos.line - 1) && err.code === 'MISSING_CHAR') ||
+      indentationLines.has(pos.line)
+    ) {
       continue;
     }
 
@@ -257,8 +262,8 @@ export function validateYamlSyntax(yamlText, options = {}) {
       continue;
     }
 
-    // Check if this line starts a block scalar: e.g. "Text: |-" or "Text: |"
-    const blockScalarMatch = line.match(/^(\s*)([A-Za-z0-9_]+):\s*\|[-+]?\s*(?:#.*)?$/);
+    // Check if this line starts a block scalar: e.g. "Text: |-", "Text: |", "Text: |2-", "Text: |-2"
+    const blockScalarMatch = line.match(/^(\s*)([A-Za-z0-9_]+):\s*\|[1-9]?[-+]?[1-9]?\s*(?:#.*)?$/);
     if (blockScalarMatch) {
       insideBlockScalar = true;
       blockScalarBaseIndent = blockScalarMatch[1].length;

@@ -72,4 +72,11 @@ describe('CLI Seam: bin/pa-yaml-validator.mjs', () => {
     assert.equal(diag.line, 4);
     assert.ok(diag.hint);
   });
+
+  it('exits with 1 when a non-existent file path is provided', () => {
+    const nonExistent = path.join(tmpDir, 'does-not-exist.pa.yaml');
+    const res = spawnSync(process.execPath, [CLI_PATH, nonExistent], { encoding: 'utf8' });
+    assert.equal(res.status, 1);
+    assert.match(res.stdout, /CLI_IO_ERROR/);
+  });
 });

@@ -32,6 +32,20 @@ MyButton:
     assert.equal(diag.severity, 'error');
   });
 
+  it('detects unquoted special indicator in sequence item (e.g. - @Button)', () => {
+    const yaml = `
+Children:
+  - @Button
+`;
+    const result = validateYaml(yaml);
+
+    assert.equal(result.valid, false);
+    const diag = result.diagnostics.find(d => d.code === 'PA1001');
+    assert.ok(diag, 'Expected diagnostic for sequence unquoted @');
+    assert.equal(diag.line, 3);
+    assert.equal(diag.severity, 'error');
+  });
+
   it('detects generic YAML syntax errors and provides line, column and hint', () => {
     const yaml = `
 MyButton:
