@@ -35,7 +35,7 @@ Sięgaj do poniższych dokumentów w zależności od wykonywanego zadania:
 - **Granica repozytoriów (Ścisłe Read-Only dla korpusów zewnętrznych)**:
   Cały kod i testy tworzymy wyłącznie w `C:\Programowanie\Power-Apps-Canvas-YAML-Parser`. Repozytoria produkcyjne `C:\Programowanie\e-Problem` oraz `C:\Programowanie\e-Zamówienia` (wraz z rozpakowanymi archiwami `.msapp` w `C:\Programowanie\e-Zamówienia\.temp_msapp_extract` i `.temp_ebadania_extract`) służą **wyłącznie do odczytu** jako korpusy weryfikacyjne.
 - **Brak flagi `--fix`**: Walidator jest narzędziem wyłącznie diagnostycznym (zwraca precyzyjne lokalizacje `line:column` oraz `hint`); nie implementujemy automatycznego przepisywania plików.
-- **Język commitów**: Wiadomości commitów (`git commit`) piszemy **po polsku** ze wskazaniem numeru ticketu (np. `feat(pa1001): wykrywanie pułapek plain scalar i błędów wcięć (#2)`).
+- **Język commitów**: Wiadomości commitów (`git commit`) piszemy domyślnie **po angielsku** (Conventional Commits in English, dopuszczalny polski w wyjątkach) ze wskazaniem numeru ticketu (np. `feat(pa1001): plain scalar hazard and indentation detection (#2)`).
 - **Środowisko Windows PowerShell**:
   - Polecenia wieloetapowe łączymy średnikiem `;` (operator `&&` powoduje błąd składni w Windows PowerShell 5.1).
   - Przy wieloliniowych opisach lub komentarzach w `gh issue` używamy flagi `--body-file <ścieżka>` zamiast przekazywania długich stringów bezpośrednio w linii poleceń.
