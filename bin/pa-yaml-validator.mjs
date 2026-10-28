@@ -108,7 +108,7 @@ function main() {
         valid: false,
         diagnostics: [
           {
-            code: 'PA1001',
+            code: 'CLI_IO_ERROR',
             severity: 'error',
             message: `Nie można odczytać pliku: ${err.message}`,
             line: 1,

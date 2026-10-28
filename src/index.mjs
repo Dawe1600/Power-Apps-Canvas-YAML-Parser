@@ -6,7 +6,7 @@ import { validateYamlSyntax } from './rules/yaml-syntax.mjs';
  *
  * @param {string} yamlText
  * @param {object} [options]
- * @param {'auto'|'pa-module'|'control-snippet'|'fx'} [options.mode='auto']
+ * @param {'auto'|'pa-module'|'control-snippet'|'fx-script'} [options.mode='auto']
  * @returns {object} Validation result { valid, mode, diagnostics, metadata }
  */
 export function validateYaml(yamlText, options = {}) {
@@ -49,7 +49,7 @@ export function validateYaml(yamlText, options = {}) {
 export function validateFx(fxText, options = {}) {
   return {
     valid: true,
-    mode: 'fx',
+    mode: 'fx-script',
     diagnostics: [],
     metadata: {
       controlNames: [],
