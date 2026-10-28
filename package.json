@@ -1,0 +1,24 @@
+{
+  "name": "pa-yaml-validator",
+  "version": "0.1.0",
+  "description": "Static validator for Power Apps Canvas YAML (PaYaml Schema v3.0) and Power Fx formulas",
+  "type": "module",
+  "main": "src/index.mjs",
+  "bin": {
+    "pa-yaml-validator": "./bin/pa-yaml-validator.mjs"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": [
+    "power-apps",
+    "powerfx",
+    "yaml",
+    "validator"
+  ],
+  "author": "Dawid Braun",
+  "license": "MIT",
+  "dependencies": {
+    "yaml": "^2.7.0"
+  }
+}
